@@ -20,15 +20,42 @@ defmodule GingerbreadHouse.Service.Business do
         GenServer.start_link(__MODULE__, [], name: __MODULE__)
     end
 
-    def handle_call({ :create, { entity, details }, :business }, _from, state), do: { :reply, Business.create(entity, details), state }
-    def handle_call({ :update, { entity, details }, :business }, _from, state), do: { :reply, Business.update(entity, details), state }
-    def handle_call({ :delete, { entity },          :business }, _from, state), do: { :reply, Business.delete(entity), state }
-    def handle_call({ :get,    { entity },          :business }, _from, state), do: { :reply, Business.get(entity), state }
-    def handle_call({ :create, { entity, details },     :representative }, _from, state), do: { :reply, Business.Representative.create(entity, details), state }
-    def handle_call({ :update, { entity, id, details }, :representative }, _from, state), do: { :reply, Business.Representative.update(entity, id, details), state }
-    def handle_call({ :delete, { entity, id },          :representative }, _from, state), do: { :reply, Business.Representative.delete(entity, id), state }
-    def handle_call({ :get,    { entity, id },          :representative }, _from, state), do: { :reply, Business.Representative.get(entity, id), state }
-    def handle_call({ :all,    { entity },              :representative }, _from, state), do: { :reply, Business.Representative.all(entity), state }
+    def handle_call({ :create, { entity, details }, :business }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.create(entity, details)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :update, { entity, details }, :business }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.update(entity, details)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :delete, { entity }, :business }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.delete(entity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :get, { entity }, :business }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.get(entity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :create, { entity, details }, :representative }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.Representative.create(entity, details)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :update, { entity, id, details }, :representative }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.Representative.update(entity, id, details)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :delete, { entity, id }, :representative }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.Representative.delete(entity, id)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :get, { entity, id }, :representative }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.Representative.get(entity, id)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :all, { entity }, :representative }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Business.Representative.all(entity)) end)
+        { :noreply, state }
+    end
 
     @type uuid :: String.t
 
