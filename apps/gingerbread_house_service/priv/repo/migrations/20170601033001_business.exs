@@ -2,14 +2,19 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Business do
     use Ecto.Migration
 
     def change do
-        GingerbreadHouse.Service.Business.TypeEnum.create_type()
+        business_type = if Application.get_env(:gingerbread_house_service, GingerbreadHouse.Service.Repo, adapter: Ecto.Adapters.Postgres)[:adapter] == Ecto.Adapters.Postgres do
+            GingerbreadHouse.Service.Business.TypeEnum.create_type()
+            :business_type
+        else
+            :integer
+        end
 
         create table(:businesses) do
             add :entity, :uuid,
                 null: false
 
-            add :type, :business_type,
-                null: false
+            add :type, business_type,
+                    null: false
 
             add :name, :string,
                 null: false

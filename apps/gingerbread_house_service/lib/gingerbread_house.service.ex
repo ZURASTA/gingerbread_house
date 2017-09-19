@@ -1,15 +1,32 @@
 defmodule GingerbreadHouse.Service do
-    @moduledoc false
+    @moduledoc """
+      The service application for managing and verifying business
+      details.
+    """
 
     use Application
 
-    def start(_type, _args) do
+    @doc """
+      Start the service application.
+
+      By default the service will run in `:auto` setup mode, which
+      will automatically create and migrate the database. To override
+      this behaviour, the mode can be passed in as an argument for the
+      `:setup_mode` key. The supported setup modes are: `:auto` and
+      `:manual`. If using manual mode, the state of the database is
+      left up to the caller.
+    """
+    def start(_type, args) do
         import Supervisor.Spec, warn: false
 
-        if Mix.env == :test do
-            GingerbreadHouse.Service.Repo.DB.drop()
+        setup_mode = args[:setup_mode] || :auto
+
+        if setup_mode == :auto do
+            if Mix.env == :test do
+                GingerbreadHouse.Service.Repo.DB.drop()
+            end
+            GingerbreadHouse.Service.Repo.DB.create()
         end
-        GingerbreadHouse.Service.Repo.DB.create()
 
         children = [
             GingerbreadHouse.Service.Repo,
@@ -19,7 +36,9 @@ defmodule GingerbreadHouse.Service do
         opts = [strategy: :one_for_one, name: GingerbreadHouse.Service.Supervisor]
         supervisor = Supervisor.start_link(children, opts)
 
-        GingerbreadHouse.Service.Repo.DB.migrate()
+        if setup_mode == :auto do
+            GingerbreadHouse.Service.Repo.DB.migrate()
+        end
 
         supervisor
     end

@@ -13,10 +13,20 @@ An API (`GingerbreadHouse.API`) is provided to allow for convenient interaction 
 A business details library (`GingerbreadHouse.BusinessDetails`) provides convenient templates to fill out the details required for different business types.
 
 
-Todo
-----
+### Configuration
 
-- [ ] Verify using stripe
-- [ ] Make a verification adapter? (to support stripe and others)
-- [ ] Support additional countries
-- [ ] PubSub?
+The service may be configured with the following options:
+
+#### Setup Mode
+
+The service has two setup modes: `:auto` and `:manual`. When the service is started in `:auto`, it will automatically handle creating and migrating the database. When the service is started in `:manual`, the state of the database is left up to the user to manually setup.
+
+By default the service runs in `:auto` mode. To change this behaviour, pass in the `{ :setup_mode, mode }` when starting the application.
+
+#### Database
+
+The database options can be configured by providing the config for the key `GingerbreadHouse.Service.Repo`. If no configuration is provided, a default configuration is used for `:test` and `:dev` builds. This default Ecto repo uses a locally hosted (accessible through localhost) PostgreSQL database, with the user/name as `postgres` and `postgres`.
+
+For details on how to configure an [Ecto repo](https://hexdocs.pm/ecto/Ecto.Repo.html).
+
+__Note:__ If a PostgreSQL database is used, the service will create a custom type. For details on how to interact with this type, see the [EctoEnum docs](http://hexdocs.pm/ecto_enum).
