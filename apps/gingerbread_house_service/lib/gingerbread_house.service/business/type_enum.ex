@@ -5,4 +5,4 @@ if Application.get_env(:gingerbread_house_service, GingerbreadHouse.Service.Repo
 else
     quote do: defenum GingerbreadHouse.Service.Business.TypeEnum, [individual: 0, company: 1]
 end
-|> Code.eval_quoted()
+|> Code.eval_quoted([], __ENV__)
