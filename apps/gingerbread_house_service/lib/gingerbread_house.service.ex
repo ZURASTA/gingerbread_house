@@ -3,13 +3,17 @@ defmodule GingerbreadHouse.Service do
 
     use Application
 
-    def start(_type, _args) do
+    def start(_type, args) do
         import Supervisor.Spec, warn: false
 
-        if Mix.env == :test do
-            GingerbreadHouse.Service.Repo.DB.drop()
+        setup_mode = args[:setup_mode] || :auto
+
+        if setup_mode == :auto do
+            if Mix.env == :test do
+                GingerbreadHouse.Service.Repo.DB.drop()
+            end
+            GingerbreadHouse.Service.Repo.DB.create()
         end
-        GingerbreadHouse.Service.Repo.DB.create()
 
         children = [
             GingerbreadHouse.Service.Repo,
@@ -19,7 +23,9 @@ defmodule GingerbreadHouse.Service do
         opts = [strategy: :one_for_one, name: GingerbreadHouse.Service.Supervisor]
         supervisor = Supervisor.start_link(children, opts)
 
-        GingerbreadHouse.Service.Repo.DB.migrate()
+        if setup_mode == :auto do
+            GingerbreadHouse.Service.Repo.DB.migrate()
+        end
 
         supervisor
     end
