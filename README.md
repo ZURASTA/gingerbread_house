@@ -1,5 +1,7 @@
-[![Stories in Ready](https://badge.waffle.io/ZURASTA/gingerbread_house.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/gingerbread_house?utm_source=badge) [![CircleCI](https://circleci.com/gh/ZURASTA/gingerbread_house.svg?style=svg)](https://circleci.com/gh/ZURASTA/gingerbread_house)
 # GingerbreadHouse (Business Management)
+
+[![Stories in Ready](https://badge.waffle.io/ZURASTA/gingerbread_house.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/gingerbread_house?utm_source=badge)
+[![CircleCI](https://circleci.com/gh/ZURASTA/gingerbread_house.svg?style=svg)](https://circleci.com/gh/ZURASTA/gingerbread_house)
 
 Manages and verifies (_using Stripe_) business details for different countries.
 
